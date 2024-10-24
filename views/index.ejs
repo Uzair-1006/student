@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scan Student ID</title>
+    <style>
+      #scanner {
+        width: 100%;
+        max-width: 400px;
+        margin: auto;
+      }
+      #student-id {
+        display: block;
+        margin: 20px auto;
+        width: 200px;
+        padding: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Scan Student ID</h1>
+
+    <!-- Scanner Interface -->
+    <div id="scanner"></div>
+
+    <!-- Input field to show the scanned Student ID -->
+    <form action="/getStudent" method="GET">
+      <input
+        type="text"
+        id="student-id"
+        name="studentID"
+        placeholder="Student ID"
+        required
+      />
+      <button type="submit">Get Student Info</button>
+    </form>
+
+    <!-- QuaggaJS for Barcode Scanning -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+    <script>
+      // Initialize QuaggaJS for barcode scanning
+      Quagga.init(
+        {
+          inputStream: {
+            name: "Live",
+            type: "LiveStream",
+            target: document.querySelector("#scanner"),
+            constraints: {
+              width: 640,
+              height: 480,
+              facingMode: "environment", // Use the back camera on mobile if available
+            },
+          },
+          decoder: {
+            readers: ["code_128_reader"], // Specify the barcode format
+          },
+          locator: {
+            patchSize: "medium", // Increase accuracy
+            halfSample: true,
+          },
+          debug: {
+            drawBoundingBox: true, // Show the detected barcode box
+            showFrequency: true,
+            drawScanline: true,
+            showPattern: true,
+          },
+        },
+        function (err) {
+          if (err) {
+            console.error(err);
+            return;
+          }
+          Quagga.start(); // Start scanning
+        }
+      );
+
+      Quagga.onDetected(function (data) {
+        const studentID = data.codeResult.code;
+        document.getElementById("student-id").value = studentID; // Populate input with scanned ID
+        document.querySelector("form").submit(); // Auto-submit the form
+      });
+
+      
+    </script>
+  </body>
+</html>

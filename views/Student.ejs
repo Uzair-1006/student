@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Info</title>
+</head>
+<body>
+  <h1>Student Information</h1>
+  <p><strong>ID:</strong> <%= student.studentID %></p>
+  <p><strong>Name:</strong> <%= student.name %></p>
+  <p><strong>Class:</strong> <%= student.class %></p>
+  <p><strong>Grades:</strong> <%= JSON.stringify(student.grades) %></p>
+  <p><strong>Attendance:</strong> <%= student.attendance %>%</p>
+</body>
+</html>
